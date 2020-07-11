@@ -26,3 +26,33 @@ function addRandomFact() {
   const factContainer = document.getElementById('fact-container');
   factContainer.innerText = fact;
 }
+
+function getRandomQuoteUsingArrowFunctions() {
+  fetch('/data').then(response => response.text()).then((message) => {
+    document.getElementById('message-container').innerText = message;
+  });
+}
+
+function loadComments() {
+    fetch('/data').then(response => response.json()).then((json) => {
+        const statsListElement = document.getElementById('comments-container');
+    statsListElement.innerHTML = '';
+    statsListElement.appendChild(
+        createListElement(json[0]));
+    statsListElement.appendChild(
+        createListElement(json[1]));
+    statsListElement.appendChild(
+        createListElement(json[2]));
+
+    console.log(json);
+    });
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+
+
