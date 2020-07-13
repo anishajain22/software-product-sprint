@@ -13,6 +13,10 @@ h1{
 #fact-container {
   margin-top: 20px;
 }
+
+#image-container {
+    background-color: white;
+}
 .row {
   display: flex;
   flex-wrap: wrap;
