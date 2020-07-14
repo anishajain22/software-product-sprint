@@ -22,22 +22,48 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.io.PrintWriter;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+  
+  List<String> list = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    List<String> list = new ArrayList<String>();
-    list.add("Coffee");
-    list.add("Cat");
-    list.add("Chocolate");
-
     String json=new Gson().toJson(list);
     
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.setContentType("application/json");
+    PrintWriter write = response.getWriter();
+    try (PrintWriter writer = response.getWriter()) {
+        writer.println(json);
+    }
+    // response.sendRedirect(request.getRequestURI());
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String text = getParameter(request, "text-input", "");
+    list.add(text);
+    // Respond with the result.
+    response.setContentType("text/html;");
+    response.getWriter().println(Arrays.toString(list.toArray()));
+    response.sendRedirect("/index.html");
+  }
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }

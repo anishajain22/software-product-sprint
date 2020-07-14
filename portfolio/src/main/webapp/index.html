@@ -8,12 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap" rel="stylesheet">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="loadComments()">
     <div id="content">
       <h1>Hi, there! Welcome to my portfolio</h1>
       <img src="/images/Anisha_Jain_Avatar.png"/>
       <p>Hi, I am Anisha Jain. I am a final year student at NITW.</p>
-      <br>
       <p>
           I am currently staying in Pune but I am originally from Chandigarh.
           I have also stayed at Hyderabad, Bangalore and Chandigarh for brief periods of time over the course of years.
@@ -21,13 +20,21 @@
           I really enjoy baking and that is something I have definitely picked up on a lot during the quarantine.
           Reading calms me and teleports me to another world.
       </p>
-      <p>Click here to get a random fact about me :P</p>
+      <p style="font-family:'Beth Ellen'">Click here to get a random fact about me :P</p>
       <button onclick="addRandomFact()">Random Fact About Me</button>
       <div id="fact-container"></div>
       
       <br>
-
-      <button onclick="loadComments()">Fetch Comments!</button>
+      <p style="font-family:'Beth Ellen'">Would love to know your thoughts:)</p>
+      <div class="form">
+        <form action="/data" method="POST">
+            <textarea name="text-input" placeholder="Leave a comment!" style="margin: 0px; width: 500px; height: 50px;"></textarea>
+            <br>
+            <input type="submit" />
+        </form>
+      </div>
+      
+      <p style="font-family:'Beth Ellen'">Previous Comments.....</p>
       <div id="comments-container"></div>
 
       <br>

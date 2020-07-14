@@ -10,12 +10,31 @@ body {
 h1{
     font-family: "Beth Ellen";
 }
+div.form
+{
+    display: block;
+    text-align: center;
+}
+form
+{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
 #fact-container {
   margin-top: 20px;
 }
 
 #image-container {
     background-color: white;
+}
+
+#comments-container {
+    background-color: #9cae37;
+    color: white;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .row {
   display: flex;

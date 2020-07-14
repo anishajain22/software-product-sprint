@@ -13,13 +13,13 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random facts to the page.
  */
 function addRandomFact() {
   const facts =
       ['I like sketching a lot!', 'I am a foodie<3', 'I have a massive sweet tooth!', 'A big movie buff:)'];
 
-  // Pick a random greeting.
+  // Pick a random fact
   const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
@@ -27,23 +27,14 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
-function getRandomQuoteUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((message) => {
-    document.getElementById('message-container').innerText = message;
-  });
-}
 
 function loadComments() {
     fetch('/data').then(response => response.json()).then((json) => {
-        const statsListElement = document.getElementById('comments-container');
+    const statsListElement = document.getElementById('comments-container');
     statsListElement.innerHTML = '';
-    statsListElement.appendChild(
-        createListElement(json[0]));
-    statsListElement.appendChild(
-        createListElement(json[1]));
-    statsListElement.appendChild(
-        createListElement(json[2]));
-
+    for(let element of json){
+        statsListElement.appendChild(createListElement(element));
+    }
     console.log(json);
     });
 }
