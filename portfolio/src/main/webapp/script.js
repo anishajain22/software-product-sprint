@@ -33,7 +33,7 @@ function loadComments() {
     const statsListElement = document.getElementById('comments-container');
     statsListElement.innerHTML = '';
     for(let element of json){
-        statsListElement.appendChild(createListElement(element));
+        statsListElement.appendChild(createListElement(element.text));
     }
     console.log(json);
     });
