@@ -34,6 +34,11 @@ function loadComments() {
     statsListElement.innerHTML = '';
     for(let element of json){
         statsListElement.appendChild(createListElement(element.text));
+        if(element.imageUrl){
+            var img = document.createElement('img'); 
+            img.src =  element.imageUrl;
+            statsListElement.appendChild(img);
+        }
     }
     console.log(json);
     });
@@ -43,6 +48,17 @@ function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
   return liElement;
+}
+
+function fetchBlobstoreUrlAndShowForm() {
+  fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((uploadUrl) => {
+        const messageForm = document.getElementById('form');
+        messageForm.action = uploadUrl;
+      });
 }
 
 
