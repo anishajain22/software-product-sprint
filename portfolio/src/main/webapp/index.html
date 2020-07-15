@@ -2,17 +2,62 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap" rel="stylesheet">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="loadComments(); fetchBlobstoreUrlAndShowForm();">
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <h1>Hi, there! Welcome to my portfolio</h1>
+      <img src="/images/Anisha_Jain_Avatar.png"/>
+      <p>Hi, I am Anisha Jain. I am a final year student at NITW.</p>
+      <p>
+          I am currently staying in Pune but I am originally from Chandigarh.
+          I have also stayed at Hyderabad, Bangalore and Chandigarh for brief periods of time over the course of years.
+          I really like to keep myslef occupied with different activites and so I keep exploring new things, be it cooking, photography or maybe just watching some good old movies.
+          I really enjoy baking and that is something I have definitely picked up on a lot during the quarantine.
+          Reading calms me and teleports me to another world.
+      </p>
+      <p style="font-family:'Beth Ellen'">Click here to get a random fact about me :P</p>
+      <button onclick="addRandomFact()">Random Fact About Me</button>
+      <div id="fact-container"></div>
+      
+      <br>
+      <p style="font-family:'Beth Ellen'">Would love to know your thoughts:)</p>
+      <div class="form">
+        <form id="form" method="POST" enctype="multipart/form-data">
+            <textarea name="text-input" placeholder="Leave a comment!" style="margin: 0px; width: 500px; height: 50px;"></textarea>
+            <p>Upload an image/gif!</p>
+            <input type="file" name="image">
+            <br>
+            <br>
+            <input type="submit" />
+        </form>
+      </div>
+      
+      <p style="font-family:'Beth Ellen'">Previous Comments.....</p>
+      <div id="comments-container"></div>
+
+      <br>
+      <p>
+          Here is the <a href = "images.html">link</a> to my gallery. Do check it out!
+      </p>
+      
+    <footer>
+        <div class="social" align="center">
+            <ul>
+                <li>
+                    <a href="https://github.com/anishajain22" target="_blank"><i class="fa fa-github"></i></a>                    
+                </li>
+                <li>
+                    <a href="https://www.linkedin.com/in/anisha-jain-04337b187 " target="_blank"><i class="fa fa-linkedin"></i></a>
+                </li>
+            </ul>
+        </div>
+    </footer>
     </div>
+
   </body>
 </html>

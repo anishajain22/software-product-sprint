@@ -13,16 +13,53 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random facts to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addRandomFact() {
+  const facts =
+      ['I like sketching a lot!', 'I am a foodie<3', 'I have a massive sweet tooth!', 'A big movie buff:)'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a random fact
+  const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const factContainer = document.getElementById('fact-container');
+  factContainer.innerText = fact;
 }
+
+
+function loadComments() {
+    fetch('/data').then(response => response.json()).then((json) => {
+    const statsListElement = document.getElementById('comments-container');
+    statsListElement.innerHTML = '';
+    for(let element of json){
+        statsListElement.appendChild(createListElement(element.text));
+        if(element.imageUrl){
+            var img = document.createElement('img'); 
+            img.src =  element.imageUrl;
+            statsListElement.appendChild(img);
+        }
+    }
+    console.log(json);
+    });
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+function fetchBlobstoreUrlAndShowForm() {
+  fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((uploadUrl) => {
+        const messageForm = document.getElementById('form');
+        messageForm.action = uploadUrl;
+      });
+}
+
+
+
