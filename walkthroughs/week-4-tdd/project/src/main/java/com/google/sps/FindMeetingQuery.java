@@ -14,10 +14,64 @@
 
 package com.google.sps;
 
-import java.util.Collection;
+import java.io.*; 
+import java.util.*;
+
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
-  }
+    public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        //throw new UnsupportedOperationException("TODO: Implement this method.");
+        ArrayList<TimeRange> allTimeSlots = new ArrayList<TimeRange>();;
+
+        for( Event event : events){
+            for(String attendee : request.getAttendees()){
+                if (event.getAttendees().contains(attendee)){
+                    allTimeSlots.add(event.getWhen());
+                }
+            }
+        }
+
+
+        Collections.sort(allTimeSlots, TimeRange.ORDER_BY_START);
+
+        Stack<TimeRange> stack = new Stack<>();
+
+        for(TimeRange timeRange : allTimeSlots) {
+            if(stack.isEmpty()) {
+                stack.push(timeRange);
+            }else {
+                TimeRange top = stack.peek();  
+                if ( !timeRange.overlaps(top) )  
+                    stack.push(timeRange);
+                else {
+                    top = TimeRange.fromStartEnd( top.start(), Math.max( top.end(), timeRange.end()), false);
+                    stack.pop();
+                    stack.push(top);
+                } 
+            }
+        }
+
+        ArrayList<TimeRange> mergedTimeSlots = new ArrayList<TimeRange>();
+        while(!stack.isEmpty()) {
+            mergedTimeSlots.add(stack.peek());
+            stack.pop();
+        }
+
+        Collections.reverse(mergedTimeSlots);  
+        int curr = TimeRange.START_OF_DAY;
+        
+        ArrayList<TimeRange> validTimeSlot = new ArrayList<TimeRange>();
+        for(TimeRange timeRange : mergedTimeSlots) {
+            if(timeRange.start() - curr >= (int)request.getDuration()) {
+                validTimeSlot.add(TimeRange.fromStartEnd(curr, timeRange.start(),false));
+            }
+            curr = Math.max(curr, timeRange.end());
+        }
+
+        if(TimeRange.END_OF_DAY - curr >= (int)request.getDuration()) {
+            validTimeSlot.add(TimeRange.fromStartEnd(curr, TimeRange.END_OF_DAY,true));
+            }
+
+        return validTimeSlot;
+    }
 }
