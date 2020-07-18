@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
         Collection<TimeRange> allRequestAttendeesTimeRanges = getRequestAttendeesTimeRanges(events, request);
-        Collection<TimeRange> mergedAllRequestTimeRanges = getMergedAllRequestTimeRanges(allRequestAttendeesTimeRanges);
+        Collection<TimeRange> mergedAllRequestTimeRanges = getMergedRequestAttendessTimeRanges(allRequestAttendeesTimeRanges);
         return getPossibleTimeRanges(mergedAllRequestTimeRanges, request);
     }
 
@@ -38,7 +38,7 @@ public final class FindMeetingQuery {
         return allRequestAttendeesTimeRanges;
     }
 
-    private Collection<TimeRange> getMergedAllRequestTimeRanges(Collection<TimeRange> allRequestAttendeesTimeRanges){
+    private Collection<TimeRange> getMergedRequestAttendessTimeRanges(Collection<TimeRange> allRequestAttendeesTimeRanges){
         Stack<TimeRange> stack = new Stack<>();
         for(TimeRange timeRange : allRequestAttendeesTimeRanges) {
             if(stack.isEmpty()) {
