@@ -14,29 +14,33 @@
 
 package com.google.sps;
 
-import java.io.*; 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-        //throw new UnsupportedOperationException("TODO: Implement this method.");
-        ArrayList<TimeRange> allTimeSlots = new ArrayList<TimeRange>();;
+        Collection<TimeRange> allRequestAttendeesTimeRanges = getRequestAttendeesTimeRanges(events, request);
+        Collection<TimeRange> mergedAllRequestTimeRanges = getMergedAllRequestTimeRanges(allRequestAttendeesTimeRanges);
+        return getPossibleTimeRanges(mergedAllRequestTimeRanges, request);
+    }
 
-        for( Event event : events){
-            for(String attendee : request.getAttendees()){
-                if (event.getAttendees().contains(attendee)){
-                    allTimeSlots.add(event.getWhen());
-                }
+    private Collection<TimeRange> getRequestAttendeesTimeRanges(Collection<Event> events, MeetingRequest request) {
+        ArrayList<TimeRange> allRequestAttendeesTimeRanges = new ArrayList<>();
+        for( Event event : events) {
+            if(event.getAttendees().stream().filter(request.getAttendees() :: contains).collect(Collectors.toList()).size()>0) {
+                    allRequestAttendeesTimeRanges.add(event.getWhen());
             }
         }
+        Collections.sort(allRequestAttendeesTimeRanges, TimeRange.ORDER_BY_START);
+        return allRequestAttendeesTimeRanges;
+    }
 
-
-        Collections.sort(allTimeSlots, TimeRange.ORDER_BY_START);
-
+    private Collection<TimeRange> getMergedAllRequestTimeRanges(Collection<TimeRange> allRequestAttendeesTimeRanges){
         Stack<TimeRange> stack = new Stack<>();
-
-        for(TimeRange timeRange : allTimeSlots) {
+        for(TimeRange timeRange : allRequestAttendeesTimeRanges) {
             if(stack.isEmpty()) {
                 stack.push(timeRange);
             }else {
@@ -50,28 +54,27 @@ public final class FindMeetingQuery {
                 } 
             }
         }
-
-        ArrayList<TimeRange> mergedTimeSlots = new ArrayList<TimeRange>();
+        ArrayList<TimeRange> mergedAllRequestTimeRanges = new ArrayList<>();
         while(!stack.isEmpty()) {
-            mergedTimeSlots.add(stack.peek());
+            mergedAllRequestTimeRanges.add(stack.peek());
             stack.pop();
         }
+        Collections.reverse(mergedAllRequestTimeRanges);
+        return mergedAllRequestTimeRanges;
+    }
 
-        Collections.reverse(mergedTimeSlots);  
+    private Collection<TimeRange> getPossibleTimeRanges(Collection<TimeRange> mergedAllRequestTimeRanges, MeetingRequest request){
         int curr = TimeRange.START_OF_DAY;
-        
-        ArrayList<TimeRange> validTimeSlot = new ArrayList<TimeRange>();
-        for(TimeRange timeRange : mergedTimeSlots) {
+        ArrayList<TimeRange> possibleTimeRanges = new ArrayList<TimeRange>();
+        for(TimeRange timeRange : mergedAllRequestTimeRanges) {
             if(timeRange.start() - curr >= (int)request.getDuration()) {
-                validTimeSlot.add(TimeRange.fromStartEnd(curr, timeRange.start(),false));
+                possibleTimeRanges.add(TimeRange.fromStartEnd(curr, timeRange.start(),false));
             }
             curr = Math.max(curr, timeRange.end());
         }
-
         if(TimeRange.END_OF_DAY - curr >= (int)request.getDuration()) {
-            validTimeSlot.add(TimeRange.fromStartEnd(curr, TimeRange.END_OF_DAY,true));
-            }
-
-        return validTimeSlot;
+            possibleTimeRanges.add(TimeRange.fromStartEnd(curr, TimeRange.END_OF_DAY,true));
+        }
+        return possibleTimeRanges;  
     }
 }
